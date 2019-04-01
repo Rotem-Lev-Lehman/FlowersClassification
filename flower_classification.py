@@ -48,6 +48,11 @@ valid_gen = train.flow_from_directory(flower_path, target_size = (img_size, img_
 # Model
 
 model = models.Sequential()
+model.add(keras.layers.MaxPooling1D(pool_size=2, strides=None, padding='valid', data_format='channels_last'))
+filters = 20
+kernel_size = 3
+model.add(keras.layers.Conv1D(filters, kernel_size, strides=1, padding='valid', data_format='channels_last', dilation_rate=1, activation=None, use_bias=True, kernel_initializer='glorot_uniform', bias_initializer='zeros', kernel_regularizer=None, bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None))
+#model.add(keras.layers.Conv2D(filters, kernel_size, strides=(1, 1), padding='valid', data_format=None, dilation_rate=(1, 1), activation=None, use_bias=True, kernel_initializer='glorot_uniform', bias_initializer='zeros', kernel_regularizer=None, bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None))
 
 # use model.add() to add any layers you like
 # read Keras documentation to find which layers you can use:
@@ -61,12 +66,11 @@ model.add(layers.Dense(classes, activation='softmax'))
 
 # fill optimizer argument using one of keras.optimizers.
 # read Keras documentation : https://keras.io/models/model/
-optimizer =model.compile(loss='mean_squared_error', optimizer='sgd')
-
+optimizer = 'sgd'
 # fill loss argument using keras.losses.
 # reads Keras documentation https://keras.io/losses/
-loss =/*keras.losses*/
-model.compile(loss= loss ,optimizer=optimizer ,metrics=['accuracy'])
+loss = keras.losses.mean_squared_error
+model.compile(loss=loss, optimizer=optimizer, metrics=['accuracy'])
 
 # you can change number of epochs by changing the value of the 'epochs' paramter
 model_hist = model.fit_generator(train_gen, steps_per_epoch=t_steps, epochs= 8 , validation_data=valid_gen, validation_steps=v_steps)
