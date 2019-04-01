@@ -61,11 +61,10 @@ model.add(layers.Dense(classes, activation='softmax'))
 
 # fill optimizer argument using one of keras.optimizers.
 # read Keras documentation : https://keras.io/models/model/
-optimizer =/*keras.optimizers*/
-
+optimizer = 'sgd'
 # fill loss argument using keras.losses.
 # reads Keras documentation https://keras.io/losses/
-loss =/*keras.losses*/
+loss = keras.losses.mean_squared_error
 model.compile(loss= loss ,optimizer=optimizer ,metrics=['accuracy'])
 
 # you can change number of epochs by changing the value of the 'epochs' paramter
