@@ -61,7 +61,7 @@ model.add(layers.Dense(classes, activation='softmax'))
 
 # fill optimizer argument using one of keras.optimizers.
 # read Keras documentation : https://keras.io/models/model/
-optimizer =/*keras.optimizers*/
+optimizer =model.compile(loss='mean_squared_error', optimizer='sgd')
 
 # fill loss argument using keras.losses.
 # reads Keras documentation https://keras.io/losses/
