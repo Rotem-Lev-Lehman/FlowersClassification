@@ -41,7 +41,7 @@ batch_size = 20
 t_steps = 3462/batch_size
 v_steps = 861/batch_size
 classes = 5
-flower_path = /*insert path */
+flower_path = "flowers";
 train_gen = train.flow_from_directory(flower_path, target_size = (img_size, img_size), batch_size = batch_size, class_mode='categorical', subset='training')
 valid_gen = train.flow_from_directory(flower_path, target_size = (img_size, img_size), batch_size = batch_size, class_mode = 'categorical', subset='validation')
 
