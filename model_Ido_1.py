@@ -31,4 +31,4 @@ def initializeModel(model, img_size, classes):
 
 
 def getName():
-    return 'model_rotem_1'
+    return 'model_ido_1'
