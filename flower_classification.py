@@ -35,6 +35,24 @@ def plt_modle(model_hist):
 
     plt.show()
 
+
+def load_trained_model(weights_path):
+    global model
+    from model_rotem_1 import initializeModel
+    model = models.Sequential()
+    initializeModel(model, img_size, classes)
+    model.load_weights(weights_path)
+    print(model.summary())
+
+
+def predict(test_set):
+    global model
+    c = model.predict_classes(test_set)
+
+    for i in range(len(test_set)):
+        print("X=%s, Predicted=%s" % (test_set[i], c[i]))
+
+
 # Split images into Training and Validation Sets (20%)
 
 train = ImageDataGenerator(rescale=1./255,horizontal_flip=True, shear_range=0.2, zoom_range=0.2,width_shift_range=0.2,height_shift_range=0.2, fill_mode='nearest', validation_split=0.2)
@@ -44,9 +62,13 @@ batch_size = 20
 t_steps = 3462/batch_size
 v_steps = 861/batch_size
 classes = 5
-flower_path = "flowers";
+flower_path = "flowers"
 train_gen = train.flow_from_directory(flower_path, target_size = (img_size, img_size), batch_size = batch_size, class_mode='categorical', subset='training')
 valid_gen = train.flow_from_directory(flower_path, target_size = (img_size, img_size), batch_size = batch_size, class_mode = 'categorical', subset='validation')
+
+#test_gen = train.
+#load_trained_model('flowers_model.h5')
+#predict(valid_gen)
 
 # Model
 
@@ -54,7 +76,7 @@ model = models.Sequential()
 
 # you can change the 'from' parameter to the file you are using your model on:
 # example, change to from model_<my name>_<my index> import initializeModel
-from model_rotem_3 import initializeModel, getName
+from model_rotem_4 import initializeModel, getName
 initializeModel(model, img_size, classes)
 
 # this should print your model's structure...
@@ -74,4 +96,3 @@ model.save(getName() + '.h5')
 # model.save('flowers_model.h5')
 
 plt_modle(model_hist)
-
