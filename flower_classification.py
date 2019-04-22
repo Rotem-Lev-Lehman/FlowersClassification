@@ -3,9 +3,9 @@ from keras import layers
 from keras import models
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
-import sys
-from PIL import Image
-sys.modules['Image'] = Image
+#import sys
+#from PIL import Image
+#sys.modules['Image'] = Image
 
 
 def plt_modle(model_hist):
