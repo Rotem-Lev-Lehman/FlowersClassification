@@ -11,11 +11,12 @@ def initializeModel(model, img_size, classes):
     # middle layers - do whatever you want with them:
     model.add(keras.layers.Conv2D(80, kernel_size=(3, 3), padding='same', activation='relu'))
     #model.add(keras.layers.Dropout(0.25))
+    model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
     model.add(keras.layers.Dense(100, activation='tanh'))
     model.add(keras.layers.Conv2D(128, kernel_size=(7, 7), padding='same', activation='relu'))
     model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
     model.add(keras.layers.Flatten())
-    model.add(keras.layers.Dense(5, activation='hard_sigmoid'))
+    #model.add(keras.layers.Dense(5, activation='hard_sigmoid'))
     #model.add(keras.layers.Dropout(0.25))
     model.add(keras.layers.Dense(100, activation='relu'))
 

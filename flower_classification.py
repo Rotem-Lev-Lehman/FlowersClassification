@@ -54,7 +54,7 @@ model = models.Sequential()
 
 # you can change the 'from' parameter to the file you are using your model on:
 # example, change to from model_<my name>_<my index> import initializeModel
-from model_rotem_2 import initializeModel, getName
+from model_rotem_3 import initializeModel, getName
 initializeModel(model, img_size, classes)
 
 # this should print your model's structure...
