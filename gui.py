@@ -180,7 +180,7 @@ def load_model():
     popup.mainloop()
 
 
-predictBtn = Button(root, text="Load Model", width = 7, command = load_model)
+predictBtn = Button(root, text="Load Model", width = 10, command = load_model)
 predictBtn.grid(row = 5, column = 3, sticky = W)
 
 predictBtn = Button(root, text="Predict", width = 7, command = make_prediction)
