@@ -226,7 +226,7 @@ from timeit import default_timer as timer
 start = timer()
 '''
 # you can change number of epochs by changing the value of the 'epochs' paramter
-model_hist = model.fit_generator(train_gen, steps_per_epoch=t_steps, epochs= 8 , validation_data=valid_gen, validation_steps=v_steps)
+model_hist = model.fit_generator(train_gen, steps_per_epoch=t_steps, epochs= 80 , validation_data=valid_gen, validation_steps=v_steps)
 
 # model.save(getName() + '.h5')
 model.save('flowers_model.h5')
