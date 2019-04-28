@@ -182,16 +182,16 @@ t_steps = 3462/batch_size
 v_steps = 861/batch_size
 classes = 5
 flower_path = "flowers"
-'''
 train_gen = train.flow_from_directory(flower_path, target_size = (img_size, img_size), batch_size = batch_size, class_mode='categorical', subset='training')
 valid_gen = train.flow_from_directory(flower_path, target_size = (img_size, img_size), batch_size = batch_size, class_mode = 'categorical', subset='validation')
-'''
+
 '''
 #test_gen = train.
 load_trained_model('model_rotem_12_fittingModel13With72epoch.h5')
 predict("C:\\Users\\Rotem\\Desktop\\תואר ראשון\\הכנה לפרוייקט\\עבודה 2\\flowers")
 '''
 # Model
+model = get_model_structure(img_size, classes)
 '''
 model = models.Sequential()
 
@@ -213,6 +213,7 @@ model = initializeModel(img_size, classes)
 '''
 # this should print your model's structure...
 print(model.summary())
+'''
 # fill optimizer argument using one of keras.optimizers.
 # read Keras documentation : https://keras.io/models/model/
 optimizer = 'sgd'
@@ -220,18 +221,18 @@ optimizer = 'sgd'
 # reads Keras documentation https://keras.io/losses/
 loss = keras.losses.mean_squared_error
 model.compile(loss=loss, optimizer=optimizer, metrics=['accuracy'])
-
+'''
 from timeit import default_timer as timer
 start = timer()
-
+'''
 # you can change number of epochs by changing the value of the 'epochs' paramter
 model_hist = model.fit_generator(train_gen, steps_per_epoch=t_steps, epochs= 8 , validation_data=valid_gen, validation_steps=v_steps)
 
-model.save(getName() + '.h5')
-# model.save('flowers_model.h5')
+# model.save(getName() + '.h5')
+model.save('flowers_model.h5')
 
 plt_modle(model_hist)
-
+'''
 end = timer()
 elapsed = end - start # Time in seconds
 print('time in minutes: ')

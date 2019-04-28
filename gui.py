@@ -1,11 +1,12 @@
 from tkinter import *
 from tkinter import filedialog
-from flower_classification import get_model_structure
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 import os
 import pandas as pd
 import numpy as np
-from PyQt5.QtWidgets import QWidget,QScrollArea, QTableWidget, QVBoxLayout,QTableWidgetItem
+import keras
+from keras import layers
+from keras import models
 
 img_size = 128
 batch_size = 20
@@ -39,11 +40,45 @@ modelPathEntry = Entry(root, width=40, bg="white")
 modelPathEntry.grid(row = 5, column = 1, sticky = W)
 
 
+def get_model_structure(img_size, classes):
+    model = models.Sequential()
+
+    model.add(keras.layers.Conv2D(96, kernel_size=(3, 3), padding='same', input_shape=(img_size, img_size, 3), activation='relu'))
+
+    model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Conv2D(256, kernel_size=(3, 3), activation='relu'))
+    model.add(keras.layers.MaxPooling2D(pool_size=(3, 3)))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Conv2D(384, kernel_size=(3, 3), activation='relu'))
+    model.add(keras.layers.MaxPooling2D(pool_size=(3, 3)))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Conv2D(256, kernel_size=(3, 3), activation='relu'))
+    model.add(keras.layers.MaxPooling2D(pool_size=(3, 3)))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Flatten())
+    model.add(keras.layers.Dense(4096, activation='relu'))
+    model.add(keras.layers.Dropout(0.5))
+    model.add(keras.layers.Dense(4096, activation='relu'))
+    model.add(keras.layers.Dropout(0.5))
+
+    # use model.add() to add any layers you like
+    # read Keras documentation to find which layers you can use:
+    #           https://keras.io/layers/core/
+    #           https://keras.io/layers/convolutional/
+    #           https://keras.io/layers/pooling/
+    #
+
+    # last layer should be with softmax activation function - do not change!!!
+    model.add(layers.Dense(classes, activation='softmax'))
+
+    return model
+
+
 def load_trained_model(weights_path):
     global model, img_size, classes
     model = get_model_structure(img_size, classes)
     model.load_weights(weights_path)
-    # print(model.summary())
 
 
 def browse_model_folders():
@@ -51,7 +86,6 @@ def browse_model_folders():
     model_filename = filedialog.askopenfile().name
     modelPathEntry.delete(0, END)
     modelPathEntry.insert(END, model_filename)
-    load_trained_model(model_filename)
 
 
 chooseModelFolder = Button(root, text="Browse", width = 6, command = browse_model_folders)
@@ -102,26 +136,7 @@ def predict(path_from, path_to):
 
 
 def show_prediction(results):
-    '''
-    win = QWidget()
-    scroll = QScrollArea()
-    layout = QVBoxLayout()
-    table = QTableWidget()
-    scroll.setWidget(table)
-    layout.addWidget(table)
-    win.setLayout(layout)
-
-    table.setColumnCount(len(results.columns))
-    table.setRowCount(len(results.index))
-    for i in range(len(results.index)):
-        for j in range(len(results.columns)):
-            table.setItem(i, j, QTableWidgetItem(str(results.iloc[i, j])))
-
-    win.show()
-    '''
-    #popup = Tk()
-    #popup.wm_title("!")
-    import plotly.plotly as py
+    import plotly as py
     import plotly.graph_objs as go
 
     df = results
@@ -135,8 +150,8 @@ def show_prediction(results):
                    align=['left'] * 2))
 
     data = [trace]
-    py.iplot(data, filename='results')
-    #popup.mainloop()
+    fig = dict(data=data)
+    py.offline.plot(fig, filename='d3-cloropleth-map.html')
 
 
 def make_prediction():
@@ -144,9 +159,29 @@ def make_prediction():
     path_to = filedialog.asksaveasfile(mode='w', defaultextension=".csv")
     if path_to is None:  # asksaveasfile return `None` if dialog closed with "cancel".
         return
-    results = predict(folder_path, path_to.name)
+    results = predict(classifyPathEntry.get(), path_to.name)
     show_prediction(results)
 
+    popup = Tk()
+    popup.title("Predicted")
+    title1_popup = Label(popup, text="Predicted The Images Successfully \n\n")
+    title1_popup.grid(row=0, column=1, sticky=N)
+    title2_popup = Label(popup, text="The results file has been saved where you asked, and you will now be able to view the results in a different screen \n\n")
+    title2_popup.grid(row=2, column=1, sticky=N)
+    popup.mainloop()
+
+
+def load_model():
+    load_trained_model(modelPathEntry.get())
+    popup = Tk()
+    popup.title("Loaded")
+    title_popup = Label(popup, text="Loaded The Model Successfully \n\n")
+    title_popup.grid(row = 0, column = 1, sticky = N)
+    popup.mainloop()
+
+
+predictBtn = Button(root, text="Load Model", width = 7, command = load_model)
+predictBtn.grid(row = 5, column = 3, sticky = W)
 
 predictBtn = Button(root, text="Predict", width = 7, command = make_prediction)
 predictBtn.grid(row = 6, column = 2, sticky = W)
